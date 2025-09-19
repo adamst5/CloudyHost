@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: cloudy-host
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run db:push && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cloudy-host-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false  
+      - key: DISCORD_CALLBACK_URL
+        sync: false
+
+databases:
+  - name: cloudy-host-db
+    plan: free
